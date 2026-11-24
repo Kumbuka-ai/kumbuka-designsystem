@@ -15,11 +15,14 @@ body { margin: 0; }
 .sc-top { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 16px; height: 56px; padding: 0 24px;
           background: var(--bg-frame); border-bottom: 1px solid var(--border); }
 .sc-top img { height: 24px; display: block; }
-.sc-nav { display: flex; gap: 4px; flex-wrap: wrap; padding: 10px 24px; background: var(--bg-frame); border-bottom: 1px solid var(--border); }
+.sc-nav { position: sticky; top: 56px; z-index: 29; display: flex; gap: 4px; flex-wrap: wrap; align-items: center; padding: 8px 24px; background: var(--bg-frame); border-bottom: 1px solid var(--border); }
+.sc-nav .sub { padding-left: 6px; font-size: 12px; }
+.sc-nav .sep { width: 1px; height: 18px; background: var(--border); margin: 0 4px; }
+.sc-main h2[id] { scroll-margin-top: 150px; }
 .sc-nav a { padding: 5px 10px; border-radius: var(--radius-md); font-size: 13px; color: var(--fg-2); text-decoration: none; }
 .sc-nav a:hover { background: var(--bg-hover); color: var(--fg-1); }
 .sc-main { max-width: 1080px; margin: 0 auto; padding: 28px 24px 64px; display: flex; flex-direction: column; gap: 36px; }
-.sc-sec { display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 120px; }
+.sc-sec { display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 150px; }
 .sc-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .sc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 .sc-sw { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--bg-panel); }
@@ -37,8 +40,8 @@ body { margin: 0; }
 .sc-joined > *:last-child { border-right: 0; }
 .sc-joined button { all: unset; display: flex; align-items: center; justify-content: space-between; height: 32px; padding: 0 10px; font-size: 13px; color: var(--fg-1); cursor: pointer; }
 .sc-joined button:hover { background: var(--bg-hover); }
-.sc-grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
-.sc-grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.sc-grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 12px; }
+.sc-grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px; }
 .sc-map { width: 100%; border-collapse: collapse; font-size: 13px; }
 .sc-map th { text-align: left; font-weight: 500; font-size: 12px; color: var(--fg-2); padding: 4px 8px 6px 0; border-bottom: 1px solid var(--border); }
 .sc-map td { padding: 6px 8px 6px 0; border-bottom: 1px solid var(--border); }
@@ -63,14 +66,30 @@ body { margin: 0; }
 .sc-strow { display: inline-flex; gap: 8px; align-items: center; width: 150px; height: var(--density-row); padding: 0 8px; border-bottom: 1px solid var(--border); background: var(--bg-panel); }
 .sc-strow.h { background: var(--bg-hover); } .sc-strow.s { background: var(--bg-selected); box-shadow: inset 3px 0 0 var(--edge-selected); }
 .sc-strow.f { outline: 2px solid var(--focus-color); outline-offset: -2px; }
-@media (max-width: 720px) { .sc-dual { grid-template-columns: minmax(0,1fr); } .sc-col { flex-direction: row; padding-top: 0; } }
+@media (max-width: 600px) {
+  .sc-top { position: static; flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 8px; }
+  .sc-top .k-eyebrow { display: none; }
+  .sc-nav { top: 0; flex-wrap: nowrap; overflow-x: auto; padding: 6px 12px; scrollbar-width: none; }
+  .sc-nav a { flex: none; } .sc-nav .sep { flex: none; }
+  .sc-main { padding: 20px 12px 48px; }
+  .sc-sec, .sc-main h2[id] { scroll-margin-top: 60px; }
+  .sc-frow { grid-template-columns: minmax(0,1fr) 34px; }
+  .sc-frow > .k-meta { grid-column: 1 / -1; text-align: left !important; }
+  .sc-frow .k-btn--icon { opacity: 1; }
+  .sc-joined { flex-direction: column; }
+  .sc-joined > * { border-right: 0; border-bottom: 1px solid var(--border); }
+  .sc-joined > *:last-child { border-bottom: 0; }
+  #formfoot > .k-btn { flex: 1; justify-content: center; }
+  .sc-map td, .sc-map th { overflow-wrap: anywhere; }
+}
+@media (max-width: 600px) { .sc-dual { grid-template-columns: minmax(0,1fr); } .sc-col { flex-direction: row; padding-top: 0; } }
 </style>
 </head>
 <body class="k-root">
 
 <header class="sc-top">
   <img id="logo" src="../assets/brand/kumbuka-logo-navy.svg" alt="kumbuka.ai">
-  <span class="k-eyebrow">Designsystem der Konsole · Arbeitsstand</span>
+  <span class="k-eyebrow">Kumbuka Designsystem · 0.1</span>
   <div style="flex:1"></div>
   <div class="k-seg" id="density" role="group" aria-label="Dichte"><button data-d="comfortable">Komfortabel</button><button data-d="compact">Kompakt</button></div>
   <div class="k-seg" id="theme" role="group" aria-label="Theme">
@@ -79,7 +98,7 @@ body { margin: 0; }
 </header>
 <nav class="sc-nav" aria-label="Abschnitte">
   <a href="#farben">Farben</a><a href="#typografie">Typografie</a><a href="#buttons">Buttons</a>
-  <a href="#formular">Formular</a><a href="#kombiniert">Kombinierte Elemente</a><a href="#feldtypen">Weitere Feldtypen</a><a href="#gruppierung">Gruppierung</a><a href="#navigation">Navigation</a><a href="#tabelle">Tabelle</a><a href="#rueckmeldung">Rückmeldung</a><a href="#ueberlagerung">Dialog</a><a href="#icons-sec">Icons</a><a href="#zustaende">Zustände</a>
+  <a href="#formular">Formular</a><a href="#kombiniert">Kombinierte Elemente</a><a href="#feldtypen">Weitere Feldtypen</a><a href="#gruppierung">Gruppierung</a><a href="#navigation">Navigation</a><span class="sep"></span><a href="#tabelle">Tabelle</a><a class="sub" href="#t-gruppiert">Gruppiert</a><a class="sub" href="#t-aufklappbar">Aufklappbar</a><a class="sub" href="#t-postfach">Postfach</a><a class="sub" href="#t-baum">Baum</a><span class="sep"></span><a href="#rueckmeldung">Rückmeldung</a><a href="#ueberlagerung">Dialog</a><a href="#icons-sec">Icons</a><a href="#zustaende">Zustände</a>
 </nav>
 
 <main class="sc-main">
@@ -108,7 +127,7 @@ body { margin: 0; }
     <div class="sc-spec"><span class="k-meta">Adresse als Kennung</span><span class="k-mono" style="display:inline-flex;gap:6px;align-items:center">dispatch://kumbuka/sprint/218.2 <i data-lucide="copy" style="width:14px;height:14px"></i></span></div>
     <div class="sc-spec"><span class="k-meta">Inline-Code</span><span>Setzen Sie <code class="k-code">four_eyes: true</code> im Schritt.</span></div>
     <div class="sc-spec"><span class="k-meta">Tastenkürzel</span><span><kbd class="k-kbd">⌘ K</kbd> <kbd class="k-kbd">G</kbd> <kbd class="k-kbd">V</kbd></span></div>
-    <div class="sc-spec"><span class="k-meta">Codeblock 13</span><pre class="k-pre"><span style="color:var(--code-comment)"># Prozessschritt Freigabe</span>
+    <div class="sc-spec"><span class="k-meta">Codeblock 13</span><pre class="k-pre" tabindex="0" aria-label="Codebeispiel"><span style="color:var(--code-comment)"># Prozessschritt Freigabe</span>
 <span style="color:var(--code-key)">step</span>: <span style="color:var(--code-string)">"freigabe-schaden"</span>
 <span style="color:var(--code-key)">four_eyes</span>: <span style="color:var(--code-bool)">true</span>
 <span style="color:var(--code-key)">threshold_eur</span>: <span style="color:var(--code-number)">5000</span>
@@ -211,15 +230,19 @@ body { margin: 0; }
 <section class="sc-sec" id="tabelle">
   <h1 class="k-title">Tabelle</h1>
   <p class="sc-note">Ein Tabellenkern, mehrere Ausprägungen: Liste, gruppiert und geordnet, Kacheln (Vorschlag), Baum (Vorschlag). Hier die Liste; der Umschalter „Tabelle / Kacheln“ zeigt dieselben Daten als Kacheln. Klick auf einen Spaltenkopf sortiert, Umschalt-Klick fügt eine weitere Sortierung hinzu; über „Sortierung“ geht dasselbe mit der Tastatur. Eingebettet wächst die Tabelle mit ihren Zeilen und scrollt nur seitlich; in Vollhöhe füllt sie den Inhaltsbereich und ist der einzige senkrechte Scroll, der Kopf bleibt stehen. Beim seitlichen Scrollen bleiben Auswahl, Nummer und Titel stehen. Der Titel ist der Einstieg ins Detail.</p>
+  <p class="sc-note">Tastatur: Jede Tabelle ist ein Grid mit einem Tabstopp. Pfeiltasten bewegen von Zelle zu Zelle, Pos1 und Ende an den Rand der Zeile, Strg+Pos1 und Strg+Ende in die Ecken, Bild auf und ab um zehn Zeilen. Enter oder F2 löst das Element in der Zelle aus (Sortieren, Aufklappen, Öffnen, Menü), die Leertaste wählt die Zeile, Escape führt aus einem Element zurück in die Zelle.</p>
   <div class="sc-row" id="tconf"></div>
   <div id="tbl"></div>
-  <h2 class="k-h2" style="margin-top:12px">Gruppiert und geordnet</h2>
+  <h2 id="t-gruppiert" class="k-h2" style="margin-top:12px">Gruppiert und geordnet</h2>
   <p class="sc-note">Gruppiert nach einem Feld; der Gruppenkopf zeigt Anzahl, Summe unter ihrer Spalte und ein Limit (Geplant: höchstens fünf). „Reihenfolge bearbeiten“ schaltet den Ordnungsmodus ein: Griff ziehen, oder Griff fokussieren und Leertaste, Pfeiltasten, Leertaste. Ziehen in einen anderen Status ändert den Status. „Verschieben nach …“ im Zeilenmenü oder als Massenaktion macht dasselbe ohne Ziehen.</p>
   <div id="tblg"></div>
-  <h2 class="k-h2" style="margin-top:12px">Gruppenliste neben der Tabelle <span class="k-state">Vorgriff auf 218.3</span></h2>
+  <h2 id="t-aufklappbar" class="k-h2" style="margin-top:12px">Aufklappbar</h2>
+  <p class="sc-note">Der Pfeil vor der Zeile klappt eine Detailzeile mit fester Form auf: ein Textblock (höchstens vier Zeilen), höchstens sechs Angaben, die nicht schon in der Zeile stehen, „Öffnen“ als Einstieg ins Detail. Nichts sonst: keine Untertabelle, keine Tabs, kein Formular, kein weiterer Aufklapper. Mehrere Zeilen dürfen offen sein; „Alle zuklappen“ sitzt im Tabellenkopf. Ein Klick auf den Titel öffnet, nur der Pfeil klappt auf.</p>
+  <div id="tble"></div>
+  <h2 id="t-postfach" class="k-h2" style="margin-top:12px">Gruppenliste neben der Tabelle <span class="k-state">Vorgriff auf 218.3</span></h2>
   <p class="sc-note">Für Felder mit vielen Werten (Workstreams, Kunden): die Gruppen stehen nicht in der Tabelle, sondern daneben, wie Ordner in einem Postfach. Links suchen und wählen, rechts die Einträge der Gruppe. Eine Zeile am Griff auf einen Workstream links ziehen verschiebt sie; Klick auf den Griff oder „In anderen Workstream …“ im Zeilenmenü macht dasselbe mit Suche, ohne Ziehen. Das Seitenlayout selbst wird in sprint/218.3 ratifiziert.</p>
   <div class="k-mailbox"><nav class="k-gnav" id="mbnav" aria-label="Workstreams"></nav><div class="k-mbmain"><div class="k-mbhead" id="mbhead"></div><div id="tblm" class="k-mbtable"></div></div></div>
-  <h2 class="k-h2" style="margin-top:12px">Baumtabelle <span class="k-state">Vorschlag</span></h2>
+  <h2 id="t-baum" class="k-h2" style="margin-top:12px">Baumtabelle <span class="k-state">Vorschlag</span></h2>
   <p class="sc-note">Für echte Hierarchien (Meilenstein, Item, Unteritem; Klammer und Kinder). Ein Tabstopp; Pfeil hoch und runter wechselt die Zeile, rechts klappt auf oder springt ins erste Kind, links klappt zu oder springt zum Elternteil, Enter öffnet. Eltern zeigen den Fortschritt ihrer Blätter. Keine Steuerelemente in den Zeilen, kein Ziehen: Umhängen geschieht über „Verschieben nach …“.</p>
   <div id="tree"></div><div class="k-sr" role="status" aria-live="polite" id="treelive"></div>
 </section>
@@ -997,9 +1020,9 @@ const TBL = [];
 function tablesRender() { TBL.forEach(t => t.render()); }
 
 function makeTable(o) {
-  const I = Object.assign({ sort: [['due', 'asc']], multi: true, paged: true, page: 1, size: 25, sel: new Set(), all: false, q: '', state: 'data',
+  const I = Object.assign({ grid: true, sort: [['due', 'asc']], multi: true, paged: true, page: 1, size: 25, sel: new Set(), all: false, q: '', state: 'data',
     density: 'page', pop: null, menu: null, menuFocus: 0, live: '', groupBy: null, groupable: false, orderable: false, order: false,
-    collapsed: new Set(), lift: null, msg: null, move: null, undo: null }, o);
+    collapsed: new Set(), open: new Set(), lift: null, msg: null, move: null, undo: null }, o);
   const host = $(I.host), liveEl = document.createElement('div');
   liveEl.className = 'k-sr'; liveEl.setAttribute('role', 'status'); liveEl.setAttribute('aria-live', 'polite'); host.after(liveEl);
   const say = t => { I.live = t; };
@@ -1046,7 +1069,7 @@ function makeTable(o) {
     }
     return { rows, total: rows.length, visible, pages, from: visible ? start + 1 : 0, to: Math.min(visible, end), groups: out };
   }
-  function lead() { return I.order ? [['grip', 32], ['sel', 40], ['rank', 40]] : I.dragOut ? [['grip', 32], ['sel', 40]] : [['sel', 40]]; }
+  function lead() { if (I.expandable) return [['exp', 36], ['sel', 40]]; return I.order ? [['grip', 32], ['sel', 40], ['rank', 40]] : I.dragOut ? [['grip', 32], ['sel', 40]] : [['sel', 40]]; }
   function sortTo(k, add) {
     const i = I.sort.findIndex(s => s[0] === k);
     if (add && I.multi) { if (i >= 0) I.sort[i][1] = I.sort[i][1] === 'asc' ? 'desc' : 'asc'; else I.sort.push([k, 'asc']); }
@@ -1087,7 +1110,8 @@ function makeTable(o) {
     const onPage = showRows ? pageRows.filter(r => I.sel.has(r.id)).length : 0;
     const head = I.all ? 'mixed' : onPage === 0 ? false : onPage === pageRows.length ? true : 'mixed';
     const selCount = I.all ? M.total : I.sel.size, L = lead(), N = L.length + TCOLS.length + 1;
-    const offs = {}; let x = 0; L.forEach(([k, w]) => { offs[k] = x; x += w; }); TCOLS.filter(c => c.fix).forEach(c => { offs[c.k] = x; x += c.w; });
+    const narrow = matchMedia('(max-width: 600px)').matches, isFix = c => c.fix && !(narrow && c.k === 'nr'), colW = c => narrow && c.k === 'title' ? 160 : c.w;
+    const offs = {}; let x = 0; L.forEach(([k, w]) => { offs[k] = x; x += w; }); TCOLS.filter(isFix).forEach(c => { offs[c.k] = x; x += colW(c); });
     const canMove = I.orderable && I.groupBy === 'status';
     const P = I.id;
 
@@ -1145,15 +1169,22 @@ function makeTable(o) {
       : I.order ? `<div class="k-tmsg k-tmsg--info">${tIco('info')}<span>Reihenfolge bearbeiten: am Griff ziehen, oder Griff fokussieren und mit Leertaste anheben, Pfeiltasten verschieben, Leertaste ablegen. Spaltensortierung und Seiten sind dabei aus.</span></div>` : '';
 
     const th = c => { const i = I.sort.findIndex(s => s[0] === c.k), on = i >= 0 && !I.order, d = on ? I.sort[i][1] : null;
-      const st = `width:${c.w}px;min-width:${c.w}px;${c.fix ? 'left:' + offs[c.k] + 'px;' : ''}`;
+      const st = `width:${colW(c)}px;min-width:${colW(c)}px;${isFix(c) ? 'left:' + offs[c.k] + 'px;' : ''}`;
       const inner = I.order ? `<span>${c.l}</span>` : `<button type="button" class="k-sort"${on ? ' data-on' : ''} data-act="sort" data-v="${c.k}" data-fk="s-${c.k}">${c.l}<span class="ind">${tIco(on ? (d === 'asc' ? 'arrow-up' : 'arrow-down') : 'arrow-up-down', 13)}</span>${on && I.sort.length > 1 ? `<span class="rank" aria-label="Sortierrang ${i + 1}">${i + 1}</span>` : ''}</button>`;
-      return `<th scope="col" class="${c.cls === 'k-tnum' ? 'k-tnum ' : ''}${c.fix ? 'k-tfix ' : ''}${c.k === 'title' ? 'k-tfix--last' : ''}" style="${st}"${i === 0 && !I.order ? ` aria-sort="${d === 'asc' ? 'ascending' : 'descending'}"` : ''}>${inner}</th>`; };
+      return `<th scope="col" class="${c.cls === 'k-tnum' ? 'k-tnum ' : ''}${isFix(c) ? 'k-tfix ' : ''}${c.k === 'title' ? 'k-tfix--last' : ''}" style="${st}"${i === 0 && !I.order ? ` aria-sort="${d === 'asc' ? 'ascending' : 'descending'}"` : ''}>${inner}</th>`; };
     const leadTh = L.map(([k, w]) => `<th scope="col" class="k-tfix ${k === 'sel' ? 'k-tsel' : ''}" style="left:${offs[k]}px;width:${w}px;min-width:${w}px">${
       k === 'sel' ? (showRows && M.total ? selBox(head, 'Alle auf dieser Seite auswählen', 'data-act="selall" data-fk="sel-all"') : '<span class="k-sr">Auswahl</span>')
-      : k === 'rank' ? '#' : '<span class="k-sr">Griff</span>'}</th>`).join('');
+      : k === 'rank' ? '#' : k === 'exp' ? (I.open.size ? `<button type="button" class="k-btn k-btn--icon k-texp" aria-label="Alle Details zuklappen" data-tip="Alle zuklappen" data-act="expnone" data-fk="exp-none">${tIco('chevrons-down-up', 15)}</button>` : '<span class="k-sr">Details</span>') : '<span class="k-sr">Griff</span>'}</th>`).join('');
     let SA = null;
     const stateBlock = (ic, title, text, btn, err) => `<div class="k-tstate${err ? ' k-tstate--error' : ''}" style="position:sticky;left:0;width:min(100%,960px)"><span class="ic">${tIco(ic, 18)}</span><b>${title}</b><span>${text}</span>${btn}</div>`;
     const stateRow = (...a) => { SA = a; return `<tbody><tr class="k-skelrow"><td colspan="${N}" style="height:auto;white-space:normal">${stateBlock(...a)}</td></tr></tbody>`; };
+    /* Detail row (C3): a fixed form with an upper bound; never tables, tabs, forms or further expanders inside. */
+    const detail = r => { const G8 = ['Büro Lenz', 'Sachverständige Ost', 'Dr. Ahrens', 'Gutachten Mitte'], TAGS = [['Regress', 'violet'], ['Großschaden', 'ochre'], ['Kulanz', 'petrol']], tg = TAGS[r.id % 3];
+      const facts = [['Schadensort', esc(r.title.split(' ').slice(1).join(' '))], ['Gutachter', esc(G8[r.id % 4])], ['Gemeldet am', `<span class="k-num">${tdate(r.upd - 3 * 864e5)}</span>`], ['Vorgang', `<span class="k-mono">dispatch://demo/schaden/${r.nr}</span>`], ['Schlagwort', `<span class="k-chip" style="background:var(--palette-${tg[1]}-soft-bg);color:var(--palette-${tg[1]}-soft-fg)">${tg[0]}</span>`], ['Dokumente', `<span class="k-num">${r.id % 5 + 1}</span>`]];
+      return `<tr class="k-tdetail" id="${P}-det-${r.id}"><td colspan="${N}"><div class="k-tdet">
+        <p class="k-tdet-text">${esc(I.describe ? I.describe(r) : '')}</p>
+        <dl class="k-tdet-facts">${facts.map(f => `<div><dt>${f[0]}</dt><dd>${f[1]}</dd></div>`).join('')}</dl>
+        <div class="k-tdet-foot"><a class="k-btn k-btn--tertiary" href="#tabelle" data-act="open" data-v="${r.nr}" data-fk="do-${r.id}">${tIco('square-arrow-out-up-right')}Öffnen</a></div></div></td></tr>`; };
     const rowMenu = (r, up) => { const open = I.menu === r.id; return `${open ? `<div class="k-menu" role="menu" aria-label="Aktionen für ${r.nr}" style="right:0;${up ? 'bottom:calc(100% + 4px)' : 'top:calc(100% + 4px)'};text-align:left">
           <div class="k-menu-item" role="menuitem" tabindex="-1" data-act="mi" data-what="Öffnen">${tIco('square-arrow-out-up-right')}Öffnen</div>
           ${canMove ? `<div class="k-menu-item" role="menuitem" tabindex="-1" data-act="moveone" data-v="${r.id}">${tIco('folder-input')}Verschieben nach …</div>` : ''}${I.dragOut ? `<div class="k-menu-item" role="menuitem" tabindex="-1" data-act="moveto" data-v="${r.id}">${tIco('folder-input')}In anderen ${esc(I.groupNoun)} …</div>` : ''}
@@ -1164,16 +1195,17 @@ function makeTable(o) {
     const row = (r, i) => { const sel = I.all || I.sel.has(r.id), st = statusOf(r.status), open = I.menu === r.id, lifted = I.lift && I.lift.id === r.id;
       const leadTd = L.map(([k]) => `<td class="k-tfix ${k === 'sel' ? 'k-tsel' : ''}" style="left:${offs[k]}px">${
         k === 'sel' ? selBox(sel, 'Auswählen: ' + r.title + ' (' + r.nr + ')', `data-act="sel" data-v="${r.id}" data-fk="sel-${r.id}"`)
+        : k === 'exp' ? `<button type="button" class="k-btn k-btn--icon k-texp" aria-expanded="${I.open.has(r.id)}" aria-controls="${P}-det-${r.id}" aria-label="Details zu ${esc(r.title)}" data-act="exp" data-v="${r.id}" data-fk="exp-${r.id}">${tIco(I.open.has(r.id) ? 'chevron-down' : 'chevron-right', 16)}</button>`
         : k === 'rank' ? `<span class="k-num" style="color:var(--fg-2)">${i + 1}</span>`
         : I.order ? `<button type="button" class="k-grip" draggable="true" aria-label="Verschieben: ${esc(r.title)}, Position ${i + 1}" aria-describedby="${P}-griphelp" aria-pressed="${!!lifted}" data-act="lift" data-v="${r.id}" data-fk="g-${r.id}">${tIco('grip-vertical', 16)}</button>`
         : `<button type="button" class="k-grip" draggable="true" aria-label="${esc(r.title)} in anderen ${esc(I.groupNoun)} verschieben" data-tip="Auf einen ${esc(I.groupNoun)} links ziehen, oder klicken und suchen" data-act="moveto" data-v="${r.id}" data-fk="g-${r.id}">${tIco('grip-vertical', 16)}</button>`}</td>`).join('');
       return `<tr class="${sel ? 'is-selected' : ''}${lifted ? ' is-lifted' : ''}" data-rid="${r.id}">${leadTd}
-        <td class="k-tid k-tfix" style="left:${offs.nr}px">${r.nr}</td>
-        <td class="k-ttext k-tfix k-tfix--last" style="left:${offs.title}px;max-width:300px"><a class="k-rowlink" href="#tabelle" data-act="open" data-v="${r.nr}" data-fk="o-${r.id}">${esc(r.title)}</a></td>
+        <td class="k-tid${narrow ? '' : ' k-tfix'}" style="${narrow ? '' : 'left:' + offs.nr + 'px'}">${r.nr}</td>
+        <td class="k-ttext k-tfix k-tfix--last" style="left:${offs.title}px;max-width:${narrow ? 160 : 300}px"><a class="k-rowlink" href="#tabelle" data-act="open" data-v="${r.nr}" data-fk="o-${r.id}">${esc(r.title)}</a></td>
         <td><span class="k-status k-status--${st[1]}">${st[0]}</span></td><td>${esc(r.art)}</td><td>${esc(r.owner)}</td>
         <td class="k-tnum">${tmoney(r.amount)}</td><td class="k-tdate">${tdate(r.due)}</td><td class="k-tdate">${tdate(r.upd)}</td>
         <td class="k-tact"><div style="position:relative;display:inline-block"><button type="button" class="k-btn k-btn--icon" aria-label="Aktionen für ${esc(r.title)} (${r.nr})" aria-haspopup="menu" aria-expanded="${open}" data-act="menu" data-v="${r.id}" data-fk="m-${r.id}">${tIco('ellipsis', 16)}</button>
-        ${rowMenu(r)}</div></td></tr>`; };
+        ${rowMenu(r)}</div></td></tr>${I.expandable && I.open.has(r.id) ? detail(r) : ''}`; };
     const ghead = g => { const lim = gLimit(g.k), coll = I.collapsed.has(g.k), full = lim && g.n >= lim;
       const before = TCOLS.findIndex(c => c.k === 'amount') - 2, after = TCOLS.length - TCOLS.findIndex(c => c.k === 'amount') - 1;
       return `<tr class="k-tghead" data-gk="${esc(g.k)}"><th scope="rowgroup" colspan="${L.length + 2}" class="k-tfix" style="left:0">
@@ -1209,17 +1241,69 @@ function makeTable(o) {
     host.innerHTML = `<div class="k-table${I.fill ? ' k-table--fill' : ''}"${I.density !== 'page' ? ` data-density="${I.density}"` : ''}>${bar}${mv}${note}
       <div class="k-tscroll" tabindex="0" role="region" aria-label="${esc(I.noun)}, ${I.view === 'cards' ? 'Kacheln' : 'Tabelle'} scrollbar">
       ${I.state === 'reloading' ? '<div class="k-progress" aria-hidden="true"></div>' : ''}
-      ${I.view === 'cards' ? `<div aria-busy="${I.state === 'loading' || I.state === 'reloading'}">${cards}</div>` : `<table class="k-tbl" aria-label="${esc(I.noun)}" aria-busy="${I.state === 'loading' || I.state === 'reloading'}" style="min-width:${1240 + (I.order ? 72 : 0)}px">
+      ${I.view === 'cards' ? `<div aria-busy="${I.state === 'loading' || I.state === 'reloading'}">${cards}</div>` : `<table class="k-tbl" aria-label="${esc(I.noun)}" aria-busy="${I.state === 'loading' || I.state === 'reloading'}" style="min-width:${(narrow ? 1100 : 1240) + (I.order ? 72 : 0)}px">
       <thead><tr>${leadTh}${TCOLS.map(th).join('')}<th class="k-tact" scope="col"><span class="k-sr">Aktionen</span></th></tr></thead>
       ${body}</table>`}</div>${foot}
       <span class="k-sr" id="${P}-griphelp">Leertaste hebt an, Pfeiltasten verschieben, auch in den Nachbarstatus, Leertaste legt ab, Escape bricht ab.</span></div>`;
     const sc1 = host.querySelector('.k-tscroll'); sc1.scrollLeft = keep[0]; sc1.scrollTop = keep[1];
     liveEl.textContent = I.live;
     icons();
+    gridify();
     if (I.menuFocus) { const m = host.querySelector('[role=menu] [role^=menuitem]'); if (m) m.focus(); I.menuFocus = 0; }
     else if (I.focusNext) { const el = host.querySelector(`[data-fk="${I.focusNext}"]`); if (el) el.focus(); I.focusNext = null; }
     else if (fk) { const el = host.querySelector(`[data-fk="${fk}"]`); if (el) { el.focus(); if (caret != null && el.setSelectionRange) el.setSelectionRange(caret, caret); } }
+    if (I.gridFocus && I.menu == null && gridOn()) { const t = host.querySelector('table.k-tbl'), c = t && t.rows[I.gc[0]] && t.rows[I.gc[0]].cells[I.gc[1]]; if (c) c.focus(); }
+    I.gridFocus = false;
   }
+  /* Keyboard model (ratified 2026-11-24): the table as a WAI-ARIA grid with one tab stop.
+     Arrows move cell by cell, Home/End to the row's ends, Ctrl+Home/End to the corners, Page Up/Down by ten rows;
+     Enter or F2 activates the control in the cell, Space selects the row, Escape returns from a control to its cell. */
+  const gridOn = () => I.grid && !I.order && I.view !== 'cards';
+  /* Bring a focused cell into view inside the scroll container, accounting for the sticky head and the sticky
+     left columns: the browser's own focus scrolling ignores sticky overlap and leaves a cell hidden behind them. */
+  function reveal(cell) {
+    const sc = cell.closest('.k-tscroll'); if (!sc) { cell.scrollIntoView({ block: 'nearest' }); return; }
+    const box = sc.getBoundingClientRect(), cb = cell.getBoundingClientRect();
+    if (!cell.classList.contains('k-tfix')) {
+      const fix = [...cell.parentElement.querySelectorAll('.k-tfix')].reduce((m, x) => Math.max(m, x.getBoundingClientRect().right), box.left);
+      if (cb.left < fix) sc.scrollLeft -= fix - cb.left;
+      else if (cb.right > box.right) sc.scrollLeft += cb.right - box.right;
+    }
+    const head = sc.querySelector('thead'), top = head && cell.parentElement.parentElement.tagName !== 'THEAD' ? head.getBoundingClientRect().bottom : box.top;
+    if (sc.scrollHeight > sc.clientHeight) {
+      if (cb.top < top) sc.scrollTop -= top - cb.top;
+      else if (cb.bottom > box.bottom) sc.scrollTop += cb.bottom - box.bottom;
+    } else { const r = cell.getBoundingClientRect(), stick = 140; if (r.top < stick || r.bottom > innerHeight) cell.scrollIntoView({ block: 'nearest' }); if (cell.getBoundingClientRect().top < stick) scrollBy(0, cell.getBoundingClientRect().top - stick - 8); }
+  }
+  function gridify() {
+    const t = host.querySelector('table.k-tbl'); if (!t || !gridOn()) return;
+    t.setAttribute('role', 'grid'); t.setAttribute('aria-rowcount', String(t.rows.length));
+    t.querySelectorAll('button, a, input').forEach(e => e.setAttribute('tabindex', '-1'));
+    const rows = [...t.rows]; if (!I.gc) I.gc = [1, 0];
+    let [r, c] = I.gc; r = Math.min(r, rows.length - 1); c = Math.min(c, rows[r].cells.length - 1); I.gc = [r, c];
+    rows.forEach(tr => [...tr.cells].forEach(x => { x.tabIndex = -1; }));
+    rows[r].cells[c].tabIndex = 0;
+  }
+  host.addEventListener('keydown', e => {
+    if (!gridOn() || e.target.closest('[role=menu], .k-pop, .k-tmove')) return;
+    const cell = e.target.closest('td, th'), t = e.target.closest('table.k-tbl'); if (!cell || !t) return;
+    const rows = [...t.rows], ri = rows.indexOf(cell.parentElement), ci = [...cell.parentElement.cells].indexOf(cell);
+    const move = (r, c) => { e.preventDefault(); r = Math.max(0, Math.min(rows.length - 1, r)); c = Math.max(0, Math.min(rows[r].cells.length - 1, c));
+      I.gc = [r, c]; rows.forEach(tr => [...tr.cells].forEach(x => { x.tabIndex = -1; })); rows[r].cells[c].tabIndex = 0; rows[r].cells[c].focus({ preventScroll: true }); reveal(rows[r].cells[c]); };
+    if (e.target === cell) {
+      if (e.key === 'ArrowDown') return move(ri + 1, ci);
+      if (e.key === 'ArrowUp') return move(ri - 1, ci);
+      if (e.key === 'ArrowRight') return move(ri, ci + 1);
+      if (e.key === 'ArrowLeft') return move(ri, ci - 1);
+      if (e.key === 'Home') return e.ctrlKey ? move(0, 0) : move(ri, 0);
+      if (e.key === 'End') return e.ctrlKey ? move(rows.length - 1, 99) : move(ri, 99);
+      if (e.key === 'PageDown') return move(ri + 10, ci);
+      if (e.key === 'PageUp') return move(ri - 10, ci);
+      if (e.key === 'Enter' || e.key === 'F2') { const w = cell.querySelector('button, a, input'); if (w) { e.preventDefault(); I.gc = [ri, ci]; if (w.matches('input')) w.focus(); else { I.gridFocus = !w.matches('[data-act=menu]'); w.click(); } } return; }
+      if (e.key === ' ') { const sb = rows[ri].querySelector('[data-act=sel], [data-act=selall]'); if (sb) { e.preventDefault(); I.gc = [ri, ci]; I.gridFocus = true; sb.click(); } return; }
+    } else if (e.key === 'Escape') { e.preventDefault(); cell.tabIndex = 0; cell.focus(); }
+  });
+  host.addEventListener('focusin', e => { if (!gridOn()) return; const cell = e.target.closest && e.target.closest('td, th'), t = cell && cell.closest('table.k-tbl'); if (t) { const rows = [...t.rows]; I.gc = [rows.indexOf(cell.parentElement), [...cell.parentElement.cells].indexOf(cell)]; } });
   I.render = render;
   I.extMove = (ids, g) => { const snap = snapshot(), moved = I.rows.filter(r => ids.includes(r.id) && r.ws !== g); moved.forEach(r => { r.ws = g; });
     if (!moved.length) return; I.msg = null;
@@ -1262,6 +1346,8 @@ function makeTable(o) {
       if (I.order) data().length && I.stats.forEach((_, s) => { if (I.rows.filter(r => r.status === s).length >= 25) I.collapsed.add(s); });
       say(I.order ? 'Reihenfolge bearbeiten ist an. Spaltensortierung und Seiten sind aus.' : 'Reihenfolge bearbeiten ist aus.'); }
     else if (a === 'view') { I.view = v; I.menu = null; say(v === 'cards' ? 'Ansicht: Kacheln.' : 'Ansicht: Tabelle.'); }
+    else if (a === 'exp') { const id = +v; I.open.has(id) ? I.open.delete(id) : I.open.add(id); say(I.open.has(id) ? 'Details aufgeklappt.' : 'Details zugeklappt.'); }
+    else if (a === 'expnone') { I.open.clear(); say('Alle Details zugeklappt.'); I.focusNext = null; }
     else if (a === 'gall') { if (I.collapsed.size) I.collapsed.clear(); else keys(data()).forEach(k => I.collapsed.add(k)); say(I.collapsed.size ? 'Alle Gruppen zugeklappt.' : 'Alle Gruppen aufgeklappt.'); }
     else if (a === 'gt') { const k = I.groupBy === 'status' ? +v : v; I.collapsed.has(k) ? I.collapsed.delete(k) : I.collapsed.add(k); }
     else if (a === 'lift') { const id = +v;
@@ -1329,6 +1415,10 @@ function makeTable(o) {
 const STAT_A = [['Eingang', 'neutral'], ['In Prüfung', 'info'], ['Wartet auf Gutachten', 'warning'], ['Freigegeben', 'success'], ['Abgelehnt', 'error']];
 const STAT_B = [['Eingang', 'neutral'], ['Offen', 'info'], ['Geplant', 'info', 5], ['In Prüfung', 'warning'], ['Erledigt', 'success']];
 const TB = makeTable({ id: 'ta', host: 'tbl', noun: 'Vorgänge', rows: tMakeRows(1143, 4711), stats: STAT_A, views: true, view: 'table' });
+const DESC = { Leitungswasser: 'Leitungswasser aus einer defekten Leitung hat Boden und Wände durchfeuchtet. Die Trocknung läuft, ein Gutachten ist beauftragt; die Höhe des Schadens ist bis dahin geschätzt. Der Verantwortliche prüft, ob die Ursache in der Wartung lag und ob ein Regress gegen den Installateur in Frage kommt.',
+  Sturm: 'Sturmböen haben Teile der Dacheindeckung gelöst. Das Dach ist provisorisch gesichert, die Reparatur ist angefragt.', Hagel: 'Hagel hat Fahrzeuge und Lichtkuppeln beschädigt. Die Fotos liegen vor.', Feuer: 'Ein Brand im Lagerbereich, die Feuerwehr war vor Ort. Der Bericht der Brandursachenermittlung steht aus, der Betrieb im Lager ruht.',
+  Einbruch: 'Einbruch über ein Fenster im Erdgeschoss, die Polizei hat aufgenommen. Die Liste der entwendeten Gegenstände ist unvollständig.', Glasbruch: 'Eine Glasscheibe im Eingangsbereich ist gesprungen, die Stelle ist abgesperrt.', Elementar: 'Starkregen hat den Keller überflutet. Die Pumpen sind angelaufen, der Schaden an der Technik wird aufgenommen.' };
+const TE = makeTable({ id: 'te', host: 'tble', noun: 'Vorgänge mit Details', rows: tMakeRows(80, 3001), stats: STAT_A, expandable: true, describe: r => DESC[r.art] || '' });
 const TG = makeTable({ id: 'tg', host: 'tblg', noun: 'Vorgänge im Team', rows: tMakeRows(64, 815, [30, 18, 4, 7, 5]), stats: STAT_B,
   groupable: true, orderable: true, groupBy: 'status', size: 25, sort: [['due', 'asc']] });
 $('tconf').addEventListener('click', e => {
@@ -1639,7 +1729,7 @@ function renderStates() {
   $('states').innerHTML = `<table class="sc-states" inert><caption class="k-sr">Zustände je Komponente</caption><thead><tr><th scope="col">Komponente</th>${S.map(s => `<th scope="col">${s}</th>`).join('')}</tr></thead><tbody>${R.map(r => `<tr><th scope="row">${r[0]}</th>${S.map(s => { const c = r[1](s); return `<td>${c == null ? '<span class="k-meta" aria-label="gibt es nicht">–</span>' : c}</td>`; }).join('')}</tr>`).join('')}</tbody></table>`;
 }
 
-renderTConf(); tablesRender(); renderNav(); renderTree(); renderEmpty(); renderChips(); renderIcons(); renderStates(); setDensity(dens);
+renderTConf(); tablesRender(); renderNav(); matchMedia('(max-width: 600px)').addEventListener('change', () => tablesRender()); renderTree(); renderEmpty(); renderChips(); renderIcons(); renderStates(); setDensity(dens);
 document.addEventListener('click', e => { const b = e.target.closest('[data-toastdemo]'); if (!b) return; const k = b.dataset.toastdemo;
   if (k === 'success') toast({ tone: 'success', text: 'Vorgang 1187 freigegeben.', action: { label: 'Rückgängig', fn: () => toast({ tone: 'info', text: 'Freigabe zurückgenommen.' }) } });
   else if (k === 'info') toast({ tone: 'info', text: 'Der Export läuft im Hintergrund. Sie werden benachrichtigt.' });

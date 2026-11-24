@@ -140,8 +140,8 @@ icon and a dashed border; "not possible yet" is only dimmed.
 - Tag input with suggestions, creation of new tags and colour choice at creation.
 - Filter builder: one joined bar per condition (field, operator, value), "all/any" logic,
   addressable filter string, remove on hover.
-- No native `select`: menus and listboxes are custom, built on an accessible headless
-  component (Radix Select or React Aria).
+- No native `select`: menus and listboxes are custom, built on React Aria Components
+  (decided 2026-11-24, section 23; Radix is out).
 
 ## 8. Further field types (in review)
 
@@ -246,16 +246,27 @@ the table, not the card, is the main way to show many objects.
   list (built), grouped and ordered, expandable; card view and tree table follow as
   further variants over the same core (same data, filter, sort, selection). Order of
   work: list, grouped/ordered, expandable, card view, tree table.
-- Native table semantics, no `role="grid"`. Sorting is a button in the header cell;
-  `aria-sort` sits on the primary sort column only; a polite status announces the order.
+- Keyboard model (revised 2026-11-24 after a trial in the showcase): every table is a
+  WAI-ARIA grid with one tab stop. Arrows move cell by cell (head and detail row included),
+  Home/End to the ends of the row, Ctrl+Home/End to the corners, Page Up/Down by ten rows;
+  Enter or F2 activates the control in the cell (sort, expand, open, menu), Space selects
+  the row, Escape returns from a control to its cell. The focused cell is scrolled into view
+  beside the sticky columns and below the sticky head, never hidden behind them. The order
+  mode keeps its own keyboard (grip, Space, arrows); the card view keeps the tab order.
+  No user setting to switch it off for now. This replaces the earlier rule "native table
+  semantics, no grid": with a hundred tab stops per page the native table was unusable from
+  the keyboard.
+- Sorting is a button in the header cell; `aria-sort` sits on the primary sort column only;
+  a polite status announces the order. There is always a sort; without a choice the table
+  falls back to its default order.
 - Sort: a click sorts by one column, two states (ascending, descending), never unsorted,
   because a server list always needs a defined order. Multi-sort is a per-instance
   switch: shift-click adds a column, the header shows its rank, and the "Sortierung"
   popover lists the sort keys as a sortable list with direction, up/down and remove.
   The popover is the real path (keyboard, discoverable); shift-click is the shortcut.
-- Expandable rows (to be built): a fixed detail form with an upper bound: at most one
-  text block clamped to four lines, at most six key-value pairs in two or three columns,
-  a footer with "Öffnen". No nested tables, tabs, forms or further expanders. Several rows
+- Expandable rows (built 2026-11-24): a fixed detail form with an upper bound: at most one
+  text block clamped to four lines, at most six key-value pairs in two or three columns
+  that the row does not already show, a footer with "Öffnen". No nested tables, tabs, forms or further expanders. Several rows
   may be open; "collapse all" in the header; the open state is not stored. Only the
   chevron expands; the row's own link stays the entry to the detail (sprint/218.3).
 - Row actions: the more-actions button is always visible, never hover-only; at most one
@@ -439,26 +450,55 @@ rework and withdraw cover the cases.
 - New: pressed. Filled buttons darken (brightness 0.88), neutral buttons take the
   selection surface.
 
-## 22. Mobile round (open)
+## 22. Narrow screens (decided 2026-11-24 by operator delegation, built)
 
-Measured on a phone (2026-11-24): the header eyebrow wraps into four lines; the filter
-builder's joined bar is too narrow and must stack per condition; button rows wrap and
-belong full width at the bottom. Tag suggestions now open on focus only. To add: tables
-and cards on narrow screens, dialogs and the side panel at full width, reflow at 400 %
-zoom (WCAG 1.4.10).
+Measured at 390 px (phone) and 320 px (400 % zoom on 1280 px, WCAG 1.4.10): no horizontal
+page scroll, no script error, axe clean.
 
-## 23. Implementation basis (open)
+- One breakpoint: 600 px. Tablets get the desktop layout, which wraps.
+- Tables: only selection and title stay sticky, the title at most 160 px; no automatic
+  switch to cards (a view that changes with the width surprises).
+- Tabs scroll sideways and snap; segmented controls scroll sideways instead of widening
+  the page; addresses and mono text may break anywhere.
+- Touch targets at least 24 x 24 px (WCAG 2.5.8), the remove buttons of tags and persons
+  included.
+- A large dialog (L) fills the screen; footer actions share the width; the side panel
+  takes the full width.
+- Filter conditions stack (field, operator, value under each other); the remove button
+  stays visible.
+- The group list sits above its table; the pattern "list, then content" belongs to the
+  pattern round (sprint/218.3).
+- Code blocks that scroll are focusable and labelled.
 
-The showcase is hand-written to show behaviour; it is not the implementation. To decide:
-the table core (TanStack Table or React Aria), the tree table (React Aria treegrid or own),
-dialogs (native `dialog` or Radix), toasts, drag and drop (dnd-kit, ratified in section 7).
+## 23. Implementation basis (ratified 2026-11-24)
+
+The showcase is hand-written to show behaviour; it is not the implementation. The product
+is built on:
+
+| No. | Building block | Basis |
+|---|---|---|
+| E1 | Table, cards, grouping, pagination, multi-sort | TanStack Table v9 (MIT) as logic; markup a native `table` or card list per sections 12 and 13 |
+| E2 | Menu, listbox, select, dialog, side panel, tooltip, toast, tabs | React Aria Components (Apache-2.0); one primitives library, Radix is out |
+| E3 | Dragging in tables, lists and onto the group list | dnd-kit (MIT), as in section 7; React Aria drag and drop is not used, one drag system only |
+| E4 | Tree table | React Aria Tree, without dragging (section 14) |
+| E5 | Virtualisation | open, decided with audit and logs (K8) |
+| E6 | Record | this section; the build decision itself belongs in the console's realisation node (REA-0008), handed over at closure because this bracket changes no nodes |
+
+Reason for the table on TanStack rather than the React Aria Table: TanStack brings
+grouping with sums and limits, multi-sort and pagination as row models, and leaves the
+markup to us (sticky columns, group heads, detail rows, the group list). Since the grid
+keyboard model was adopted (section 12) the React Aria Table no longer conflicts with the
+semantics; the choice rests on grouping and control of the markup. The price: the grid
+keyboard is ours and is covered by tests (Playwright and axe in CI, one screen reader pass
+per table variant). The components will be adapted
+heavily, so the console needs its own component library on top of these bases; whether it
+becomes a repository of its own, published as open source, is open (see section 24).
 
 ## 24. Open in 218.16
 
 - Ratify sections 8 to 10 and 13 to 18, 20 and 21.
-- Expandable row (ratified in section 12, not built).
-- Implementation basis (section 23).
-- Mobile round (section 22).
+- Own component library: separate open-source repository ("Kumbuka Design System") or part
+  of ee-console; to be decided outside this bracket.
 - Rebuild the console stylesheet (`unified-console/shared/console.css`) from this design
   system so that the empty shell renders.
 - Design System artifact in Claude Design.
